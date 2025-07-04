@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { toast } from 'react-toastify'
 
 export default function EditPage() {
   const router = useRouter()
@@ -21,7 +22,7 @@ export default function EditPage() {
         .eq('id', id)
         .single()
       if (error) {
-        setError('Ошибка при загрузке объявления')
+        toast.error('Ошибка при загрузке объявления')
         setLoading(false)
         return
       }
@@ -41,12 +42,14 @@ export default function EditPage() {
       setError('')
     } else {
       setError('Неверный пин-код')
+      toast.error('Неверный пин-код')
     }
   }
 
   async function handleSave() {
     if (!authPassed) {
       setError('Введите правильный пин-код для сохранения')
+      toast.error('Введите правильный пин-код для сохранения')
       return
     }
     const { error } = await supabase
@@ -55,9 +58,11 @@ export default function EditPage() {
       .eq('id', id)
     if (error) {
       setError('Ошибка при сохранении')
+      toast.error('Ошибка при сохранении')
       return
     }
-    alert('Объявление сохранено!')
+    toast.success('Объявление сохранено!')
+    router.push('/listings') // редирект после сохранения
   }
 
   if (loading) return <p>Загрузка...</p>
@@ -75,8 +80,11 @@ export default function EditPage() {
             value={pinCode}
             onChange={(e) => setPinCode(e.target.value)}
             maxLength={6}
+            style={{ padding: 8, width: '100%', marginBottom: 10 }}
           />
-          <button onClick={handlePinCheck}>Подтвердить</button>
+          <button onClick={handlePinCheck} style={{ padding: '8px 16px' }}>
+            Подтвердить
+          </button>
           {error && <p style={{ color: 'red' }}>{error}</p>}
         </>
       )}
