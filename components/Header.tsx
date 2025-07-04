@@ -4,7 +4,9 @@ export default function Header() {
   const { pathname } = useRouter();
 
   const linkClass = (href: string) =>
-    \`text-sm font-medium \${pathname === href ? 'text-blue-700' : 'text-gray-600 hover:text-blue-700'}\`;
+    pathname === href
+      ? 'text-sm font-medium text-blue-700'
+      : 'text-sm font-medium text-gray-600 hover:text-blue-700';
 
   return (
     <header className="bg-white shadow py-4 px-6 flex justify-between items-center">
