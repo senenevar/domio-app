@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabaseClient'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 
 // @ts-ignore
 const Map = dynamic(() => import('../components/Map'), { ssr: false })
@@ -43,12 +44,14 @@ export default function ListingsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-4">
               {listings.map((listing) => (
-                <div key={listing.id} className="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
-                  <h2 className="text-lg font-bold text-blue-800">{listing.title}</h2>
-                  <p className="text-sm text-gray-600">{listing.description}</p>
-                  <p className="text-sm mt-1">💶 {listing.price} €</p>
-                  <p className="text-xs text-gray-500">📍 {listing.location}</p>
-                </div>
+                <Link key={listing.id} href={`/listing/${listing.id}`}>
+                  <a className="block bg-white p-5 rounded-xl shadow hover:shadow-md transition">
+                    <h2 className="text-lg font-bold text-blue-800">{listing.title}</h2>
+                    <p className="text-sm text-gray-600">{listing.description}</p>
+                    <p className="text-sm mt-1">💶 {listing.price} €</p>
+                    <p className="text-xs text-gray-500">📍 {listing.location}</p>
+                  </a>
+                </Link>
               ))}
             </div>
             <div className="h-[500px] rounded-xl overflow-hidden">
