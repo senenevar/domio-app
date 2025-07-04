@@ -7,13 +7,19 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 
-// Чтобы маркеры Leaflet отображались корректно
-delete L.Icon.Default.prototype._getIconUrl
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+// Создаем новый икон для маркера
+const DefaultIcon = L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
 })
+
+// Задаем этот икон как икон по умолчанию для всех маркеров
+L.Marker.prototype.options.icon = DefaultIcon
 
 export default function ListingDetailPage() {
   const router = useRouter()
@@ -31,7 +37,6 @@ export default function ListingDetailPage() {
 
   if (!listing) return <p className="p-6 text-center">Загрузка...</p>
 
-  // Координаты для карты: если есть, используем, иначе центр Риги
   const position = listing?.latitude && listing?.longitude
     ? [listing.latitude, listing.longitude]
     : [56.9496, 24.1052]
