@@ -1,15 +1,16 @@
 
-import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
+import { GetServerSideProps } from 'next'
 
-export default function EditTestPage() {
+export default function EditPage() {
   const { id } = useRouter().query
 
+  if (!id) return <p>Загрузка...</p>
+
   return (
-    <div style={{ padding: 40 }}>
-      <h1 style={{ fontSize: 28 }}>🔧 Редактирование объявления</h1>
-      <p>🆔 ID из URL: <strong>{id}</strong></p>
-      <p>Если ты это видишь — маршрут работает ✅</p>
+    <div style={{ padding: '2rem' }}>
+      <h1>Редактирование объявления</h1>
+      <p>ID: <strong>{id}</strong></p>
     </div>
   )
 }
