@@ -3,11 +3,30 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
-import L from 'leaflet'
+import dynamic from 'next/dynamic'
 
-// Создаем новый икон для маркера
+// Динамический импорт MapContainer и прочих без SSR
+const MapContainer = dynamic(
+  () => import('react-leaflet').then(mod => mod.MapContainer),
+  { ssr: false }
+)
+const TileLayer = dynamic(
+  () => import('react-leaflet').then(mod => mod.TileLayer),
+  { ssr: false }
+)
+const Marker = dynamic(
+  () => import('react-leaflet').then(mod => mod.Marker),
+  { ssr: false }
+)
+const Popup = dynamic(
+  () => import('react-leaflet').then(mod => mod.Popup),
+  { ssr: false }
+)
+
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+
+// Настраиваем иконки Leaflet, как и раньше
 const DefaultIcon = L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -18,7 +37,6 @@ const DefaultIcon = L.icon({
   shadowSize: [41, 41],
 })
 
-// Задаем этот икон как икон по умолчанию для всех маркеров
 L.Marker.prototype.options.icon = DefaultIcon
 
 export default function ListingDetailPage() {
@@ -37,7 +55,6 @@ export default function ListingDetailPage() {
 
   if (!listing) return <p className="p-6 text-center">Загрузка...</p>
 
-  // Явно указываем тип как кортеж из двух чисел
   const position: [number, number] = (listing?.latitude && listing?.longitude)
     ? [listing.latitude, listing.longitude]
     : [56.9496, 24.1052]
