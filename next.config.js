@@ -1,11 +1,14 @@
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  output: 'standalone',
-  experimental: {
-    appDir: false
-  }
-}
+  async redirects() {
+    return [
+      {
+        source: '/list',
+        destination: '/listings',
+        permanent: true,
+      },
+    ];
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

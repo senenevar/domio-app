@@ -13,7 +13,7 @@ export default function Header() {
       <a href="/" className="text-xl font-bold text-blue-700">Domio</a>
       <nav className="flex gap-4">
         <a href="/" className={linkClass('/')}>Главная</a>
-        <a href="/list" className={linkClass('/list')}>Объявления</a>
+        <a href="/listings" className={linkClass('/listings')}>Объявления</a>
         <a href="/add" className={linkClass('/add')}>Добавить</a>
       </nav>
     </header>
