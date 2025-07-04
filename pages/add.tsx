@@ -14,6 +14,7 @@ export default function AddPage() {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
   const [pinCode, setPinCode] = useState('')
+  const [listingId, setListingId] = useState<number | null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -24,12 +25,17 @@ export default function AddPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const pin = generatePin()
-    const { error } = await supabase.from('listings').insert([{ ...form, pin_code: pin }])
-    if (error) {
+    const { data, error } = await supabase
+      .from('listings')
+      .insert([{ ...form, pin_code: pin }])
+      .select()
+
+    if (error || !data) {
       setError('Ошибка при отправке')
     } else {
       setSuccess(true)
       setPinCode(pin)
+      setListingId(data[0].id)
     }
   }
 
@@ -43,7 +49,10 @@ export default function AddPage() {
             <div className="text-center">
               <p className="text-green-600 mb-4">Объявление добавлено!</p>
               <p className="text-gray-700">Ваш код для управления: <span className="font-mono font-bold">{pinCode}</span></p>
-              <p className="text-sm text-gray-500 mt-2">Сохрани этот код — он потребуется для редактирования или удаления</p>
+              {listingId && (
+                <p className="text-gray-700 mt-2">ID объявления: <span className="font-mono font-bold">{listingId}</span></p>
+              )}
+              <p className="text-sm text-gray-500 mt-2">Сохрани код и ID — они потребуются для редактирования</p>
             </div>
           ) : (
             <form className="space-y-4" onSubmit={handleSubmit}>
