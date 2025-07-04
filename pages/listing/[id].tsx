@@ -5,28 +5,16 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import dynamic from 'next/dynamic'
 
-// Динамический импорт MapContainer и прочих без SSR
-const MapContainer = dynamic(
-  () => import('react-leaflet').then(mod => mod.MapContainer),
-  { ssr: false }
-)
-const TileLayer = dynamic(
-  () => import('react-leaflet').then(mod => mod.TileLayer),
-  { ssr: false }
-)
-const Marker = dynamic(
-  () => import('react-leaflet').then(mod => mod.Marker),
-  { ssr: false }
-)
-const Popup = dynamic(
-  () => import('react-leaflet').then(mod => mod.Popup),
-  { ssr: false }
-)
+// Динамические импорты Leaflet компонентов с отключенным SSR (только клиент)
+const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false })
+const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false })
+const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false })
+const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false })
 
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
-// Настраиваем иконки Leaflet, как и раньше
+// Иконки Leaflet (без прямого обращения к window)
 const DefaultIcon = L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -45,17 +33,18 @@ export default function ListingDetailPage() {
   const [listing, setListing] = useState<any>(null)
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!id) return
-      const { data } = await supabase.from('listings').select('*').eq('id', id).single()
-      setListing(data)
-    }
-    fetchData()
+    if (!id) return
+    supabase
+      .from('listings')
+      .select('*')
+      .eq('id', id)
+      .single()
+      .then(({ data }) => setListing(data))
   }, [id])
 
   if (!listing) return <p className="p-6 text-center">Загрузка...</p>
 
-  const position: [number, number] = (listing?.latitude && listing?.longitude)
+  const position: [number, number] = listing?.latitude && listing?.longitude
     ? [listing.latitude, listing.longitude]
     : [56.9496, 24.1052]
 
@@ -84,7 +73,7 @@ export default function ListingDetailPage() {
           <div className="mt-6" style={{ height: 400 }}>
             <MapContainer center={position} zoom={13} style={{ height: '100%', width: '100%' }}>
               <TileLayer
-                attribution='&copy; OpenStreetMap'
+                attribution="&copy; OpenStreetMap"
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               <Marker position={position}>
