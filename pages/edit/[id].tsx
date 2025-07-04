@@ -62,7 +62,7 @@ export default function EditPage() {
       return
     }
     toast.success('Объявление сохранено!')
-    router.push('/listings') // редирект после сохранения
+    router.push('/listings')
   }
 
   if (loading) return <p>Загрузка...</p>
