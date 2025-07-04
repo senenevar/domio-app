@@ -1,7 +1,11 @@
+'use client'
+
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { LatLngExpression } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
-const cities: Record<string, [number, number]> = {
+// @ts-ignore
+const cities: Record<string, LatLngExpression> = {
   Riga: [56.9496, 24.1052],
   Daugavpils: [55.874, 26.536],
   Liepaja: [56.511, 21.0136],
@@ -9,20 +13,37 @@ const cities: Record<string, [number, number]> = {
   Ventspils: [57.39, 21.57],
 }
 
-export default function Map({ listings }: any) {
+type Props = {
+  listings: {
+    id: number
+    title: string
+    price: string
+    location: string
+  }[]
+}
+
+export default function Map({ listings }: Props) {
   return (
-    <MapContainer center={[56.9496, 24.1052]} zoom={7} className="w-full h-full z-0">
+    <MapContainer
+      center={[56.9496, 24.1052]}
+      zoom={7}
+      className="w-full h-full z-0"
+      scrollWheelZoom={false}
+      style={{ height: '100%', width: '100%' }}
+    >
       <TileLayer
-        attribution='&copy; OpenStreetMap'
+        attribution="&copy; OpenStreetMap"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {listings.map((listing: any) => {
+      {listings.map((listing) => {
         const loc = cities[listing.location] || [56.9496, 24.1052]
         return (
           <Marker key={listing.id} position={loc}>
             <Popup>
-              <strong>{listing.title}</strong><br />
-              💶 {listing.price} €<br />
+              <strong>{listing.title}</strong>
+              <br />
+              💶 {listing.price} €
+              <br />
               📍 {listing.location}
             </Popup>
           </Marker>
