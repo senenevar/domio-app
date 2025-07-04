@@ -37,7 +37,8 @@ export default function ListingDetailPage() {
 
   if (!listing) return <p className="p-6 text-center">Загрузка...</p>
 
-  const position = listing?.latitude && listing?.longitude
+  // Явно указываем тип как кортеж из двух чисел
+  const position: [number, number] = (listing?.latitude && listing?.longitude)
     ? [listing.latitude, listing.longitude]
     : [56.9496, 24.1052]
 
