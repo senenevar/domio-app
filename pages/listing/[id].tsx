@@ -5,27 +5,8 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import dynamic from 'next/dynamic'
 
-// Динамические импорты Leaflet компонентов с отключенным SSR (только клиент)
-const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false })
-const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false })
-const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false })
-const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false })
-
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
-
-// Иконки Leaflet (без прямого обращения к window)
-const DefaultIcon = L.icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-})
-
-L.Marker.prototype.options.icon = DefaultIcon
+// Динамический импорт Map с отключением SSR
+const Map = dynamic(() => import('../../components/Map'), { ssr: false })
 
 export default function ListingDetailPage() {
   const router = useRouter()
@@ -44,10 +25,6 @@ export default function ListingDetailPage() {
 
   if (!listing) return <p className="p-6 text-center">Загрузка...</p>
 
-  const position: [number, number] = listing?.latitude && listing?.longitude
-    ? [listing.latitude, listing.longitude]
-    : [56.9496, 24.1052]
-
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
@@ -57,29 +34,13 @@ export default function ListingDetailPage() {
           <p className="text-sm text-gray-500 mb-2">📍 {listing.location}</p>
           <p className="text-sm text-gray-600 mb-4">{listing.description}</p>
           <p className="text-lg font-semibold">💶 {listing.price} €</p>
-          <div className="grid grid-cols-2 gap-4 mt-4 text-sm text-gray-700">
-            <p><strong>Тип:</strong> {listing.property_type}</p>
-            <p><strong>Сделка:</strong> {listing.deal_type}</p>
-            <p><strong>Комнаты:</strong> {listing.rooms}</p>
-            <p><strong>Площадь:</strong> {listing.area} м²</p>
-            <p><strong>Этаж:</strong> {listing.floor}</p>
-            <p><strong>Этажей в здании:</strong> {listing.total_floors}</p>
-          </div>
-
           <div className="mt-6 p-4 border rounded-lg bg-blue-50 text-blue-900">
             <p><strong>Контакт:</strong> {listing.contact}</p>
           </div>
 
+          {/* Передаем массив из одного объявления, т.к. Map ожидает listings[] */}
           <div className="mt-6" style={{ height: 400 }}>
-            <MapContainer center={position} zoom={13} style={{ height: '100%', width: '100%' }}>
-              <TileLayer
-                attribution="&copy; OpenStreetMap"
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={position}>
-                <Popup>{listing.title}</Popup>
-              </Marker>
-            </MapContainer>
+            <Map listings={[listing]} />
           </div>
         </div>
       </main>
