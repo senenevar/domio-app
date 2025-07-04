@@ -3,5 +3,13 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Inter', sans-serif;
+  @apply bg-domio-light text-gray-800;
+}
+
+input, textarea {
+  @apply border-gray-300 focus:border-domio focus:ring-domio;
+}
+
+button {
+  @apply bg-domio hover:bg-domio-dark text-white font-semibold transition;
 }
