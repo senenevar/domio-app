@@ -1,18 +1,18 @@
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 
 export default function Header() {
-  const { pathname } = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data?.user ?? null);
-    });
+    const fetchSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+    };
+    fetchSession();
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      setSession(session);
     });
 
     return () => {
@@ -20,22 +20,20 @@ export default function Header() {
     };
   }, []);
 
-  const linkClass = (href: string) =>
-    pathname === href
-      ? 'text-sm font-medium text-blue-700'
-      : 'text-sm font-medium text-gray-600 hover:text-blue-700';
-
   return (
     <header className="bg-white shadow py-4 px-6 flex justify-between items-center">
       <a href="/" className="text-xl font-bold text-blue-700">Domio</a>
       <nav className="flex gap-4">
-        <a href="/" className={linkClass('/')}>Главная</a>
-        <a href="/listings" className={linkClass('/listings')}>Объявления</a>
-        <a href="/add" className={linkClass('/add')}>Добавить</a>
-        {user ? (
-          <a href="/account" className={linkClass('/account')}>Личный кабинет</a>
+        <a href="/" className="text-sm font-medium text-gray-600 hover:text-blue-700">Главная</a>
+        <a href="/listings" className="text-sm font-medium text-gray-600 hover:text-blue-700">Объявления</a>
+        <a href="/add" className="text-sm font-medium text-gray-600 hover:text-blue-700">Добавить</a>
+        {session ? (
+          <a href="/account" className="text-sm font-medium text-blue-700">Личный кабинет</a>
         ) : (
-          <a href="/auth/login" className={linkClass('/auth/login')}>Вход</a>
+          <>
+            <a href="/auth/login" className="text-sm font-medium text-gray-600 hover:text-blue-700">Вход</a>
+            <a href="/auth/register" className="text-sm font-medium text-gray-600 hover:text-blue-700">Регистрация</a>
+          </>
         )}
       </nav>
     </header>
