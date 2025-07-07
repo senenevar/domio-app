@@ -1,7 +1,24 @@
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabaseClient';
 
 export default function Header() {
   const { pathname } = useRouter();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data?.user ?? null);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
   const linkClass = (href: string) =>
     pathname === href
@@ -15,6 +32,11 @@ export default function Header() {
         <a href="/" className={linkClass('/')}>Главная</a>
         <a href="/listings" className={linkClass('/listings')}>Объявления</a>
         <a href="/add" className={linkClass('/add')}>Добавить</a>
+        {user ? (
+          <a href="/account" className={linkClass('/account')}>Личный кабинет</a>
+        ) : (
+          <a href="/auth/login" className={linkClass('/auth/login')}>Вход</a>
+        )}
       </nav>
     </header>
   );
