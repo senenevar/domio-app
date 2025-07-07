@@ -1,51 +1,42 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabaseClient';
+import { useRouter } from 'next/router';
+import styles from '../../styles/Auth.module.css';
+import FormInputPassword from '../../components/FormInputPassword';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setError(error.message);
-    } else {
-      router.push('/account');
-    }
+    if (error) alert(error.message);
+    else router.push('/account');
   };
 
   return (
-    <div className="max-w-md mx-auto mt-12">
-      <h1 className="text-2xl font-bold mb-4">Вход</h1>
-      <form onSubmit={handleLogin} className="space-y-4">
+    <div className={styles.container}>
+      <h2>Вход</h2>
+      <form onSubmit={handleLogin}>
         <input
+          className={styles.input}
           type="email"
           placeholder="Email"
-          className="w-full border px-4 py-2"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Пароль"
-          className="w-full border px-4 py-2"
+        <FormInputPassword
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          onChange={e => setPassword(e.target.value)}
         />
-        {error && <p className="text-red-500">{error}</p>}
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-          Войти
-        </button>
+        <div style={{ marginTop: '0.5rem' }}>
+          <a href="/auth/reset-password" style={{ fontSize: '0.875rem', color: '#2563eb' }}>Забыли пароль?</a>
+        </div>
+        <button className={styles.button} type="submit">Войти</button>
       </form>
-      <p className="mt-4">
-        Нет аккаунта? <a href="/auth/register" className="text-blue-600">Регистрация</a>
-      </p>
     </div>
-  );
+    );
 }
