@@ -1,23 +1,16 @@
-'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
-import styles from '@/styles/Auth.module.css';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { supabase } from '../../lib/supabaseClient';
 
 export default function Login() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       setError(error.message);
     } else {
@@ -26,39 +19,33 @@ export default function Login() {
   };
 
   return (
-    <div className={styles.container}>
-      <form onSubmit={handleLogin} className={styles.form}>
-        <h1 className={styles.logo}>
-          <Link href="/">Domio</Link>
-        </h1>
+    <div className="max-w-md mx-auto mt-12">
+      <h1 className="text-2xl font-bold mb-4">Вход</h1>
+      <form onSubmit={handleLogin} className="space-y-4">
         <input
           type="email"
           placeholder="Email"
+          className="w-full border px-4 py-2"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <div className={styles.passwordField}>
-          <input
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Пароль"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <span onClick={() => setShowPassword(!showPassword)}>
-            👁️
-          </span>
-        </div>
-        {error && <p className={styles.error}>{error}</p>}
-        <button type="submit">Войти</button>
-        <p className={styles.link}>
-          Нет аккаунта? <Link href="/auth/register">Регистрация</Link>
-        </p>
-        <p className={styles.link}>
-          <Link href="/auth/reset">Забыли пароль?</Link>
-        </p>
+        <input
+          type="password"
+          placeholder="Пароль"
+          className="w-full border px-4 py-2"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        {error && <p className="text-red-500">{error}</p>}
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
+          Войти
+        </button>
       </form>
+      <p className="mt-4">
+        Нет аккаунта? <a href="/auth/register" className="text-blue-600">Регистрация</a>
+      </p>
     </div>
   );
 }
