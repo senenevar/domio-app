@@ -1,31 +1,39 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { createClient } from "@/lib/supabaseClient";
-import AuthWrapper from "@/components/AuthWrapper";
-import styles from "@/styles/Auth.module.css";
-import { Eye, EyeOff } from "lucide-react";
 
-const supabase = createClient();
+'use client'
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
+import styles from "@/styles/Auth.module.css";
+import AuthWrapper from "@/components/AuthWrapper";
 
 export default function Register() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
-      alert("Пароли не совпадают");
+      setError("Пароли не совпадают");
       return;
     }
-    const { error } = await supabase.auth.signUp({ email, password });
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
     if (error) {
-      alert(error.message);
+      setError(error.message);
     } else {
-      alert("Подтвердите email для завершения регистрации.");
       router.push("/auth/login");
     }
   };
@@ -33,11 +41,8 @@ export default function Register() {
   return (
     <AuthWrapper>
       <div className={styles.container}>
-        <h1 className={styles.logo} onClick={() => router.push("/")}>
-          Domio
-        </h1>
         <h2 className={styles.title}>Регистрация</h2>
-        <form onSubmit={handleRegister} className={styles.form}>
+        <form className={styles.form} onSubmit={handleRegister}>
           <input
             type="email"
             placeholder="Email"
@@ -58,8 +63,7 @@ export default function Register() {
             <button
               type="button"
               className={styles.eyeButton}
-              onClick={() => setShowPassword(!showPassword)}
-              tabIndex={-1}
+              onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
@@ -76,21 +80,18 @@ export default function Register() {
             <button
               type="button"
               className={styles.eyeButton}
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              tabIndex={-1}
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
             >
               {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
+          {error && <p className={styles.error}>{error}</p>}
           <button type="submit" className={styles.button}>
             Зарегистрироваться
           </button>
         </form>
-        <p className={styles.link}>
-          Уже есть аккаунт?{" "}
-          <span className={styles.linkSpan} onClick={() => router.push("/auth/login")}>
-            Войти
-          </span>
+        <p className={styles.linkText}>
+          Уже есть аккаунт? <Link href="/auth/login">Войти</Link>
         </p>
       </div>
     </AuthWrapper>
