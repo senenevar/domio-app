@@ -62,5 +62,6 @@ export default function LoginPage() {
         </p>
       </form>
     </div>
+    <AuthWrapper>
   )
 }
