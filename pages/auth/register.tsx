@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
-import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 import styles from "@/styles/Auth.module.css";
 import AuthWrapper from "@/components/AuthWrapper";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Register() {
   const router = useRouter();
@@ -25,10 +25,7 @@ export default function Register() {
       return;
     }
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    const { error } = await supabase.auth.signUp({ email, password });
 
     if (error) {
       setError(error.message);
@@ -39,22 +36,18 @@ export default function Register() {
 
   return (
     <AuthWrapper>
-      <div className={styles.card}>
-        
+      <div className={styles.container}>
         <h2 className={styles.title}>Регистрация</h2>
-        <p className={styles.description}>Создайте новый аккаунт Domio</p>
-    
-        <form className={styles.form} onSubmit={handleRegister}>
-          <div className={styles.inputGroup}>
-            <input
-              type="email"
-              placeholder="Email"
-              className={styles.input}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+        <p className={styles.subtitle}>Создайте новый аккаунт Domio</p>
+        <form onSubmit={handleRegister} className={styles.form}>
+          <input
+            type="email"
+            placeholder="Email"
+            className={styles.input}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
           <div className={styles.passwordWrapper}>
             <input
               type={showPassword ? "text" : "password"}
