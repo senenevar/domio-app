@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState } from "react";
@@ -40,17 +39,19 @@ export default function Register() {
 
   return (
     <AuthWrapper>
-      <div className={styles.container}>
+      <div className={styles.card}>
         <h2 className={styles.title}>Регистрация</h2>
         <form className={styles.form} onSubmit={handleRegister}>
-          <input
-            type="email"
-            placeholder="Email"
-            className={styles.input}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <div className={styles.inputGroup}>
+            <input
+              type="email"
+              placeholder="Email"
+              className={styles.input}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
           <div className={styles.passwordWrapper}>
             <input
               type={showPassword ? "text" : "password"}
