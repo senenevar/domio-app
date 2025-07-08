@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabaseClient';
 import styles from '../../styles/Auth.module.css';
 
@@ -10,7 +9,6 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,13 +24,8 @@ export default function Register() {
       password,
     });
 
-    if (error) {
-      setMessage(error.message);
-    } else {
-      setMessage('Регистрация прошла успешно! Проверьте вашу почту для подтверждения.');
-    }
-
     setLoading(false);
+    setMessage(error ? error.message : 'Регистрация успешна! Проверьте почту.');
   };
 
   return (
@@ -40,10 +33,11 @@ export default function Register() {
       <a href="/" className={styles.logo}>Domio</a>
       <form onSubmit={handleRegister} className={styles.form}>
         <h2>Регистрация</h2>
-        {message && <p className={message.includes('успешно') ? styles.success : styles.error}>{message}</p>}
+        {message && <p className={message.includes('успешна') ? styles.success : styles.error}>{message}</p>}
         <input
           type="email"
           placeholder="Email"
+          className={styles.input}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -52,24 +46,26 @@ export default function Register() {
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Пароль"
+            className={styles.input}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="button" onClick={() => setShowPassword(!showPassword)}>👁️</button>
+          <button type="button" className={styles.toggleBtn} onClick={() => setShowPassword(!showPassword)}>👁️</button>
         </div>
         <input
           type={showPassword ? 'text' : 'password'}
           placeholder="Повторите пароль"
+          className={styles.input}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-        <button type="submit" disabled={loading}>
+        <button type="submit" className={styles.button} disabled={loading}>
           {loading ? 'Загрузка...' : 'Зарегистрироваться'}
         </button>
         <p className={styles.link}>Уже есть аккаунт? <a href="/auth/login">Войти</a></p>
       </form>
     </div>
-  );
+);
 }
