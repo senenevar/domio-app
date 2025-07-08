@@ -1,63 +1,62 @@
 .container {
-  max-width: 400px;
-  margin: 4rem auto;
-  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f7ff;
+}
+.form {
   background: white;
+  padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  text-align: center;
-}
-.title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #2563eb;
-  margin-bottom: 1.5rem;
-}
-.inputGroup {
-  margin-bottom: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  text-align: left;
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
 }
-.inputGroup input {
+.logo {
+  text-align: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #3b82f6;
+}
+input {
   padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
   font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+}
+button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.error {
+  color: red;
+  font-size: 0.9rem;
+}
+.success {
+  color: green;
+  font-size: 0.9rem;
+}
+.link {
+  text-align: center;
+  font-size: 0.9rem;
 }
 .passwordField {
   display: flex;
+  gap: 0.5rem;
   align-items: center;
-  position: relative;
 }
-.passwordField input {
-  width: 100%;
-  padding-right: 2.5rem;
-}
-.toggleButton {
-  position: absolute;
-  right: 0.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-.button {
-  background-color: #3b82f6;
-  color: white;
-  font-weight: bold;
-  padding: 0.75rem;
-  width: 100%;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 0.5rem;
-}
-.link {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-}
-.link a {
-  color: #2563eb;
+.logo a {
   text-decoration: none;
-  margin-left: 0.25rem;
+  color: #3b82f6;
 }
