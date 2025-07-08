@@ -26,7 +26,13 @@ export default function Login() {
       <form onSubmit={handleLogin} className={styles.form}>
         <h2>Вход</h2>
         {error && <p className={styles.error}>{error}</p>}
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
         <div className={styles.passwordField}>
           <input
             type={showPassword ? 'text' : 'password'}
@@ -42,5 +48,5 @@ export default function Login() {
         <p className={styles.link}>Нет аккаунта? <a href="/auth/register">Регистрация</a></p>
       </form>
     </div>
-    );
+  );
 }
