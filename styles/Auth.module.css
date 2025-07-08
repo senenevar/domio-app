@@ -1,85 +1,91 @@
 .container {
-  background-color: white;
+  background: white;
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-  text-align: center;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #2563eb;
-  text-decoration: none;
-  display: block;
-  margin-bottom: 0.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  max-width: 400px;
+  width: 100%;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 0.9rem;
   margin-bottom: 1.5rem;
+  color: #666;
+  text-align: center;
 }
 
 .form {
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 1rem;
 }
 
-.inputWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-}
-
-.inputWrapper input {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
+.input {
+  padding: 0.75rem 1rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
-  background-color: #f9f9f9;
+  font-size: 1rem;
+  width: 100%;
 }
 
-.passwordField {
+.button {
+  padding: 0.75rem;
+  background-color: #3b5bdb;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #364fc7;
+}
+
+.linkText {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.error {
+  color: red;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.passwordWrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
-  position: relative;
 }
 
-.passwordField input {
+.passwordWrapper input {
   flex: 1;
-  padding-right: 2.5rem;
 }
 
 .eyeButton {
+  position: absolute;
+  right: 1rem;
   background: none;
   border: none;
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #555;
   cursor: pointer;
-}
-
-.submitButton {
-  background-color: #3b82f6;
-  color: white;
-  font-weight: 600;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  cursor: pointer;
-}
-
-.links {
-  margin-top: 1rem;
+  padding: 0;
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.875rem;
+  align-items: center;
+  justify-content: center;
 }
