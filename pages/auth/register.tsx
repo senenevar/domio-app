@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState } from 'react'
@@ -39,13 +40,15 @@ export default function RegisterPage() {
       <Link href="/" className={styles.logo}>Domio</Link>
       <h2 className={styles.title}>Регистрация</h2>
       <form onSubmit={handleRegister} className={styles.form}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <div className={styles.passwordWrapper}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
         <div className={styles.passwordWrapper}>
           <input
             type={showPassword ? 'text' : 'password'}
