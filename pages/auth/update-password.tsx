@@ -41,5 +41,6 @@ export default function UpdatePasswordPage() {
         {message && <p>{message}</p>}
       </div>
     </div>
+    </AuthWrapper>
   )
 }
