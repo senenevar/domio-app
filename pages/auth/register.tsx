@@ -1,76 +1,67 @@
-import { useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
-import { useRouter } from 'next/router';
-import styles from '../../styles/Auth.module.css';
+'use client';
 
-export default function RegisterPage() {
-  const router = useRouter();
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
+import styles from '@/styles/Auth.module.css';
+import Link from 'next/link';
+
+export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
-  const [successMsg, setSuccessMsg] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMsg('');
-    setSuccessMsg('');
-
     if (password !== repeatPassword) {
-      setErrorMsg('Пароли не совпадают');
+      setError('Пароли не совпадают');
       return;
     }
 
     const { error } = await supabase.auth.signUp({ email, password });
-    if (error) setErrorMsg(error.message);
+    if (error) setError(error.message);
     else {
-      setSuccessMsg('Проверьте почту для подтверждения');
-      setEmail('');
-      setPassword('');
-      setRepeatPassword('');
+      setSuccess('Подтвердите email перед входом');
+      setError('');
     }
   };
 
   return (
     <div className={styles.container}>
-      <a href="/" className={styles.logo}>Domio</a>
       <form onSubmit={handleRegister} className={styles.form}>
+        <h1 className={styles.logo}>Domio</h1>
         <input
           type="email"
           placeholder="Email"
-          className={styles.input}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
         <div className={styles.passwordField}>
           <input
-            type={showPassword ? 'text' : 'password'}
+            type="password"
             placeholder="Пароль"
-            className={styles.input}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="button" onClick={() => setShowPassword(!showPassword)} className={styles.toggleBtn}>
-            {showPassword ? '🙈' : '👁️'}
-          </button>
         </div>
         <input
-          type={showPassword ? 'text' : 'password'}
+          type="password"
           placeholder="Повторите пароль"
-          className={styles.input}
           value={repeatPassword}
           onChange={(e) => setRepeatPassword(e.target.value)}
           required
         />
-        <button type="submit" className={styles.submitButton}>Зарегистрироваться</button>
-        {errorMsg && <p className={styles.error}>{errorMsg}</p>}
-        {successMsg && <p className={styles.success}>{successMsg}</p>}
-        <p className={styles.link}>
-          Уже есть аккаунт? <a href="/auth/login">Войти</a>
-        </p>
+        {error && <p className={styles.error}>{error}</p>}
+        {success && <p className={styles.success}>{success}</p>}
+        <button type="submit">Зарегистрироваться</button>
+        <div className={styles.link}>
+          <Link href="/auth/login">Уже есть аккаунт? Войти</Link>
+        </div>
       </form>
     </div>
   );
