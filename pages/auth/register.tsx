@@ -40,7 +40,10 @@ export default function Register() {
   return (
     <AuthWrapper>
       <div className={styles.card}>
+        
         <h2 className={styles.title}>Регистрация</h2>
+        <p className={styles.description}>Создайте новый аккаунт Domio</p>
+    
         <form className={styles.form} onSubmit={handleRegister}>
           <div className={styles.inputGroup}>
             <input
