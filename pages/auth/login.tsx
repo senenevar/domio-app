@@ -16,35 +16,29 @@ export default function LoginPage() {
     e.preventDefault();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) setError(error.message);
-    else router.push('/');
+    else router.push('/account');
   };
 
   return (
     <div className={styles.container}>
       <Link href="/" className={styles.logo}>Domio</Link>
-      <h1 className={styles.title}>Вход</h1>
       <form onSubmit={handleLogin} className={styles.form}>
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <h2>Вход</h2>
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <div className={styles.passwordField}>
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Пароль"
-            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
-          <button type="button" onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
+          <span onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </span>
         </div>
         {error && <p className={styles.error}>{error}</p>}
-        <button type="submit" className="button">Войти</button>
+        <button type="submit">Войти</button>
         <p className={styles.link}><Link href="/auth/reset-password">Забыли пароль?</Link></p>
         <p className={styles.link}>Нет аккаунта? <Link href="/auth/register">Регистрация</Link></p>
       </form>

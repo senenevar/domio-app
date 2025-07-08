@@ -9,14 +9,14 @@ export default function RegisterPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== confirm) {
+    if (password !== confirmPassword) {
       setError('Пароли не совпадают');
       return;
     }
@@ -24,47 +24,34 @@ export default function RegisterPage() {
     if (error) setError(error.message);
     else {
       setSuccess('Проверьте email для подтверждения');
-      setEmail('');
-      setPassword('');
-      setConfirm('');
+      setError('');
     }
   };
 
   return (
     <div className={styles.container}>
       <Link href="/" className={styles.logo}>Domio</Link>
-      <h1 className={styles.title}>Регистрация</h1>
       <form onSubmit={handleRegister} className={styles.form}>
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <h2>Регистрация</h2>
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <div className={styles.passwordField}>
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Пароль"
-            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
-          <button type="button" onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
+          <span onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </span>
         </div>
-        <input
-          type="password"
-          placeholder="Повторите пароль"
-          required
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-        />
+        <input type="password" placeholder="Повторите пароль" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
         {error && <p className={styles.error}>{error}</p>}
         {success && <p className={styles.success}>{success}</p>}
-        <button type="submit" className="button">Зарегистрироваться</button>
-        <p className={styles.link}><Link href="/auth/login">Уже есть аккаунт? Войти</Link></p>
+        <button type="submit">Зарегистрироваться</button>
+        <p className={styles.link}><Link href="/auth/reset-password">Забыли пароль?</Link></p>
+        <p className={styles.link}>Уже есть аккаунт? <Link href="/auth/login">Войти</Link></p>
       </form>
     </div>
   );
