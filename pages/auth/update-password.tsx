@@ -1,3 +1,4 @@
+import AuthWrapper from "@/components/AuthWrapper";
 
 'use client'
 
@@ -23,6 +24,7 @@ export default function UpdatePasswordPage() {
   }
 
   return (
+    <AuthWrapper>
     <div className={styles.authContainer}>
       <div className={styles.formContainer}>
         <h2>Сброс пароля</h2>

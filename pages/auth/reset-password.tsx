@@ -1,3 +1,4 @@
+import AuthWrapper from "@/components/AuthWrapper";
 import { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import styles from '../../styles/Auth.module.css';
@@ -20,6 +21,7 @@ export default function ResetPassword() {
   };
 
   return (
+    <AuthWrapper>
     <div className={styles.container}>
       <a href="/" className={styles.logo}>Domio</a>
       <form onSubmit={handleReset} className={styles.form}>
@@ -31,5 +33,6 @@ export default function ResetPassword() {
         <p className={styles.link}><a href="/auth/login">Назад ко входу</a></p>
       </form>
     </div>
+    </AuthWrapper>
   );
 }

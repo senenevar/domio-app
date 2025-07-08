@@ -1,3 +1,4 @@
+import AuthWrapper from "@/components/AuthWrapper";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
@@ -29,6 +30,7 @@ export default function RegisterPage() {
   };
 
   return (
+    <AuthWrapper>
     <div className={styles.container}>
       <Link href="/" className={styles.logo}>Domio</Link>
       <form onSubmit={handleRegister} className={styles.form}>
@@ -53,5 +55,6 @@ export default function RegisterPage() {
         <p className={styles.link}>Уже есть аккаунт? <Link href="/auth/login">Войти</Link></p>
       </form>
     </div>
+    </AuthWrapper>
   );
 }

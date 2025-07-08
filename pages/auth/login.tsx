@@ -1,3 +1,4 @@
+import AuthWrapper from "@/components/AuthWrapper";
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
@@ -27,6 +28,7 @@ export default function LoginPage() {
   }
 
   return (
+    <AuthWrapper>
     <div className={styles.container}>
       <Link href="/" className={styles.logo}>Domio</Link>
       <h2 className={styles.title}>Войти в аккаунт</h2>
