@@ -1,7 +1,6 @@
-import AuthWrapper from "@/components/AuthWrapper";
-
 'use client'
 
+import AuthWrapper from "@/components/AuthWrapper";
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
