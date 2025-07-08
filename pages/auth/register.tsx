@@ -32,7 +32,7 @@ export default function RegisterPage() {
     <div className={styles.container}>
       <Link href="/" className={styles.logo}>Domio</Link>
       <form onSubmit={handleRegister} className={styles.form}>
-        <h2>Регистрация</h2>
+        <h2 className={styles.title}>Регистрация</h2>
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <div className={styles.passwordField}>
           <input
@@ -50,7 +50,6 @@ export default function RegisterPage() {
         {error && <p className={styles.error}>{error}</p>}
         {success && <p className={styles.success}>{success}</p>}
         <button type="submit">Зарегистрироваться</button>
-        <p className={styles.link}><Link href="/auth/reset-password">Забыли пароль?</Link></p>
         <p className={styles.link}>Уже есть аккаунт? <Link href="/auth/login">Войти</Link></p>
       </form>
     </div>
