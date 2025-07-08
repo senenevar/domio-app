@@ -5,6 +5,9 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  background-color: #f9fafb;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .logo {
@@ -14,22 +17,19 @@
   text-align: center;
   margin-bottom: 1rem;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .title {
   text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-.passwordField {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
 }
 
 .link {
@@ -40,11 +40,28 @@
 .error {
   color: red;
   font-size: 0.9rem;
+  text-align: center;
 }
 
 .success {
   color: green;
   font-size: 0.9rem;
+  text-align: center;
+}
+
+.submit {
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit:hover {
+  background-color: #2563eb;
 }
 
 .passwordWrapper {
@@ -56,6 +73,11 @@
 .passwordWrapper input {
   flex: 1;
   padding-right: 36px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: white;
 }
 
 .eyeButton {
@@ -68,4 +90,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #6b7280;
+}
+
+.eyeButton:hover {
+  color: #111827;
 }
