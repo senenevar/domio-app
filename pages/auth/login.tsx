@@ -1,51 +1,53 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { supabase } from '../../lib/supabaseClient';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
+import styles from '@/styles/Auth.module.css';
+import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react';
 
-export default function Login() {
+export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setError(error.message);
-    } else {
-      router.push('/account');
-    }
+    if (error) setError(error.message);
+    else router.push('/');
   };
 
   return (
-    <div className="max-w-md mx-auto mt-12">
-      <h1 className="text-2xl font-bold mb-4">Вход</h1>
-      <form onSubmit={handleLogin} className="space-y-4">
+    <div className={styles.container}>
+      <Link href="/" className={styles.logo}>Domio</Link>
+      <h1 className={styles.title}>Вход</h1>
+      <form onSubmit={handleLogin} className={styles.form}>
         <input
           type="email"
           placeholder="Email"
-          className="w-full border px-4 py-2"
+          required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         />
-        <input
-          type="password"
-          placeholder="Пароль"
-          className="w-full border px-4 py-2"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        {error && <p className="text-red-500">{error}</p>}
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-          Войти
-        </button>
+        <div className={styles.passwordField}>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Пароль"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button type="button" onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
+        {error && <p className={styles.error}>{error}</p>}
+        <button type="submit" className="button">Войти</button>
+        <p className={styles.link}><Link href="/auth/reset-password">Забыли пароль?</Link></p>
+        <p className={styles.link}>Нет аккаунта? <Link href="/auth/register">Регистрация</Link></p>
       </form>
-      <p className="mt-4">
-        Нет аккаунта? <a href="/auth/register" className="text-blue-600">Регистрация</a>
-      </p>
     </div>
   );
 }

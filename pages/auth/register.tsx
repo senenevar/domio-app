@@ -1,76 +1,71 @@
-
 import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { supabase } from '../../lib/supabaseClient';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
+import styles from '@/styles/Auth.module.css';
+import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react';
 
-export default function Register() {
+export default function RegisterPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const router = useRouter();
+  const [confirm, setConfirm] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage('');
-    if (password !== confirmPassword) {
-      setMessage('Пароли не совпадают');
+    if (password !== confirm) {
+      setError('Пароли не совпадают');
       return;
     }
-
-    setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) {
-      setMessage(error.message);
-    } else {
-      setMessage('Регистрация прошла успешно! Проверьте вашу почту для подтверждения.');
+    const { error } = await supabase.auth.signUp({ email, password });
+    if (error) setError(error.message);
+    else {
+      setSuccess('Проверьте email для подтверждения');
+      setEmail('');
+      setPassword('');
+      setConfirm('');
     }
-
-    setLoading(false);
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4">Регистрация</h1>
-      <form onSubmit={handleRegister} className="space-y-4">
+    <div className={styles.container}>
+      <Link href="/" className={styles.logo}>Domio</Link>
+      <h1 className={styles.title}>Регистрация</h1>
+      <form onSubmit={handleRegister} className={styles.form}>
         <input
           type="email"
           placeholder="Email"
-          className="w-full border px-4 py-2 rounded"
+          required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         />
-        <input
-          type="password"
-          placeholder="Пароль"
-          className="w-full border px-4 py-2 rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div className={styles.passwordField}>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Пароль"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button type="button" onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
         <input
           type="password"
           placeholder="Повторите пароль"
-          className="w-full border px-4 py-2 rounded"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
           required
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
         />
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded w-full"
-        >
-          {loading ? 'Загрузка...' : 'Зарегистрироваться'}
-        </button>
+        {error && <p className={styles.error}>{error}</p>}
+        {success && <p className={styles.success}>{success}</p>}
+        <button type="submit" className="button">Зарегистрироваться</button>
+        <p className={styles.link}><Link href="/auth/login">Уже есть аккаунт? Войти</Link></p>
       </form>
-      {message && <p className="mt-4 text-sm text-center text-red-600">{message}</p>}
     </div>
   );
 }
